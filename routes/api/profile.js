@@ -42,4 +42,25 @@ router.get(
   }
 );
 
+// @route   Post api/profile/
+// @desc    Create User Profile
+// @access  Public
+
+// you have to login to get that user info (we have the token of payload of user information)
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const profileFields = {};
+    profileFields.user = req.user.id;
+    if (req.body.handle) profileFields.handle = req.body.handle;
+    if (req.body.company) profileFields.company = req.body.company;
+    if (req.body.website) profileFields.website = req.body.website;
+    if (req.body.location) profileFields.location = req.body.location;
+    if (req.body.handle) profileFields.handle = req.body.handle;
+    if (req.body.handle) profileFields.handle = req.body.handle;
+    if (req.body.handle) profileFields.handle = req.body.handle;
+  }
+);
+
 module.exports = router;
