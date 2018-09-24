@@ -10,6 +10,9 @@ const Profile = require("../../models/Profile");
 // Load User Model
 const User = require("../../models/User");
 
+// Load Profile Validation
+const validateProfileInput = require("../../validation/profile");
+
 // @route   GET api/profile/test
 // @desc    Tests Profile route
 // @access  Private
@@ -51,6 +54,13 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateProfileInput(req.body);
+
+    // Check validation
+    if (!isValid) {
+      res.status(400).res.json(errors);
+    }
+
     const profileFields = {};
     profileFields.user = req.user.id;
     if (req.body.handle) profileFields.handle = req.body.handle;
