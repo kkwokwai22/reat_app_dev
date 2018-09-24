@@ -3,27 +3,59 @@ const isEmpty = require("./is-empty");
 
 module.exports = function validateProfileInput(data) {
   let errors = {};
-  data.company = !isEmpty(data.company) ? data.company : "";
-  data.website = !isEmpty(data.website) ? data.website : "";
-  data.location = !isEmpty(data.location) ? data.location : "";
+  data.handle = !isEmpty(data.handle) ? data.handle : "";
+  data.skills = !isEmpty(data.skills) ? data.skills : "";
   data.status = !isEmpty(data.status) ? data.status : "";
-  data.bio = !isEmpty(data.bio) ? data.bio : "";
-  data.githubusername = !isEmpty(data.githubusername)
-    ? data.githubusername
-    : "";
 
-  if (!Validator.isEmail(data.email)) {
-    errors.email = "Email is invalid";
+  // checking for handle Length and Valid
+  if (!Validator.isLength(data.handle, { min: 2, max: 40 })) {
+    errors.handle = "Handle needs to between 2 and 4 charcters";
+  }
+  if (Validator.isEmpty(data.handle)) {
+    errors.handle = "Handle field is required";
   }
 
-  if (Validator.isEmpty(data.password)) {
-    errors.password = "Password field is required";
+  // checking for handle Length and Valid
+  if (Validator.isEmpty(data.skills)) {
+    errors.skills = "Skills field is required";
   }
 
-  if (Validator.isEmpty(data.email)) {
-    errors.email = "Email field is required";
+  if (Validator.isEmpty(data.status)) {
+    errors.status = "Status field is required";
   }
 
+  if (!isEmpty(data.website)) {
+    if (!Validator.isURL(data.website)) {
+      errors.website = "Not a valid URL";
+    }
+  }
+
+  if (!isEmpty(data.youtube)) {
+    if (!Validator.isURL(data.youtube)) {
+      errors.youtube = "Not a valid URL";
+    }
+  }
+  if (!isEmpty(data.linkedin)) {
+    if (!Validator.isURL(data.linkedin)) {
+      errors.linkedin = "Not a valid URL";
+    }
+  }
+  if (!isEmpty(data.facebook)) {
+    if (!Validator.isURL(data.facebook)) {
+      errors.facebook = "Not a valid URL";
+    }
+  }
+  if (!isEmpty(data.twitter)) {
+    if (!Validator.isURL(data.twitter)) {
+      errors.twitter = "Not a valid URL";
+    }
+  }
+
+  if (!isEmpty(data.instgram)) {
+    if (!Validator.isURL(data.instgram)) {
+      errors.instgram = "Not a valid URL";
+    }
+  }
   return {
     errors,
     isValid: isEmpty(errors)

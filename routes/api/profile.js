@@ -34,6 +34,7 @@ router.get(
     const errors = {};
 
     Profile.findOne({ user: req.user.id })
+      .populate("user", ["name", "avatar"])
       .then(profile => {
         if (!profile) {
           errors.noprofile = "There is no profile for this user";
@@ -47,10 +48,10 @@ router.get(
 
 // @route   Post api/profile/
 // @desc    Create User or Edit Profile
-// @access  Public
+// @access  Private
 
 // you have to login to get that user info (we have the token of payload of user information)
-router.get(
+router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -58,9 +59,9 @@ router.get(
 
     // Check validation
     if (!isValid) {
-      res.status(400).res.json(errors);
+      // Return any errors with 400 status
+      return res.status(400).json(errors);
     }
-
     const profileFields = {};
     profileFields.user = req.user.id;
     if (req.body.handle) profileFields.handle = req.body.handle;
@@ -74,7 +75,7 @@ router.get(
 
     // Skills - Split into Array
     if (req.body.skills !== "undefined") {
-      profileFields.skills = req.body.sills.split(",");
+      profileFields.skills = req.body.skills.split(",");
     }
 
     // Social
